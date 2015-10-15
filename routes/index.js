@@ -3,11 +3,11 @@ var router = express.Router();
 
 var querystring = require('querystring');
 
-var https = require('https');
+var http = require('http');
 
 var host = 'localhost';
 
-function performRequest(endpoint, method, data, success) {
+function performRequest(host, port, endpoint, method, data, success) {
   var dataString = JSON.stringify(data);
   var headers = {};
   
@@ -22,15 +22,15 @@ function performRequest(endpoint, method, data, success) {
   }
   
   var options = {
-    host: 'node-config-service-dev.elasticbeanstalk.com',
-	port: 80,
+    host: host,
+	port: port,
     path: '/config',
     method: 'GET',
     headers: headers
   };
 
-  console.log(options);
-  var req = https.request(options, function(res) {
+  console.log("Options: " + JSON.stringify(options, null, 2));
+  var req = http.request(options, function(res) {
     res.setEncoding('utf-8');
 
     var responseString = '';
@@ -51,12 +51,11 @@ function performRequest(endpoint, method, data, success) {
 }
 
 router.get('/', function(req, res, next) {
-performRequest('/config', 'GET', {data: 'data'}, function(data){
-	  console.log('performRequest');
-	  console.log(data);
-  });
-	
-  res.render('index', { title: 'Express' });
+	performRequest('localhost', 8000, '/config', 'GET', {data: 'data'}, function(data){
+		console.log('performRequest');
+		console.log(JSON.stringify(data,null,2));
+		res.render('index', { title: 'Express', data: data });
+	  });	
 });
 
 router.use(logErrors);
