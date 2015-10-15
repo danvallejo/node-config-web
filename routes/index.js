@@ -22,13 +22,14 @@ function performRequest(endpoint, method, data, success) {
   }
   
   var options = {
-    host: 'configuration-service-0.elasticbeanstalk.com',
+    host: 'node-config-service-dev.elasticbeanstalk.com',
 	port: 80,
     path: '/config',
     method: 'GET',
     headers: headers
   };
 
+  console.log(options);
   var req = https.request(options, function(res) {
     res.setEncoding('utf-8');
 
@@ -50,9 +51,10 @@ function performRequest(endpoint, method, data, success) {
 }
 
 router.get('/', function(req, res, next) {
-//performRequest('/config', 'GET', {data: 'data'}, function(data){
-//	  console.log(data);
-//  });
+performRequest('/config', 'GET', {data: 'data'}, function(data){
+	  console.log('performRequest');
+	  console.log(data);
+  });
 	
   res.render('index', { title: 'Express' });
 });
