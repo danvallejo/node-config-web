@@ -23,7 +23,7 @@ function performRequest(endpoint, method, data, success) {
   
   var options = {
     host: 'configuration-service-0.elasticbeanstalk.com',
-	//port: 80,
+	port: 80,
     path: '/config',
     method: 'GET',
     headers: headers
@@ -50,11 +50,19 @@ function performRequest(endpoint, method, data, success) {
 }
 
 router.get('/', function(req, res, next) {
-  performRequest('/config', 'GET', {data: 'data'}, function(data){
-	  console.log(data);
-  });
+//performRequest('/config', 'GET', {data: 'data'}, function(data){
+//	  console.log(data);
+//  });
 	
   res.render('index', { title: 'Express' });
 });
+
+router.use(logErrors);
+
+function logErrors(error, request, response, next)
+{
+	console.error('error:' + JSON.stringify(error, null, 2));
+	next(error)
+}
 
 module.exports = router;
