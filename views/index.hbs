@@ -1,2 +1,6 @@
 <h1>{{title}}</h1>
 <p>Welcome to {{title}}</p>
+
+<p>{{#each data.users}}</p>
+<p>{{this.Name}} - {{this.First}} - {{this.Age}}</p>
+<p>{{/each}}</p>
